@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -10,6 +10,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'user must have email'],
         unique: true,
+    },
+    phone: {
+        type: String,
+        required: [true, 'user must have phone'],
+        minlength: 11,
     },
     password: {
         type: String,
@@ -25,6 +30,23 @@ const UserSchema = new mongoose.Schema({
             },
             message: 'confirmpassword with password not the same',
         },
+    },
+    rule: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user',
+    },
+});
+
+UserSchema.pre('save', async function (next) {
+    this.password = await bcrypt.hash(this.password, 10);
+    this.confirmPassword = undefined;
+    next();
+});
+
+UserSchema.method({
+    validatePassword: async function (password) {
+        return await bcrypt.compare(password, this.password);
     },
 });
 

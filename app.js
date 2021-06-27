@@ -2,9 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const cookie_parsers = require('cookie-parser');
-// passport
-const passport = require('passport');
-require('./config/passport')(passport);
 
 // app
 const app = express();
@@ -15,6 +12,7 @@ mongoose.connect(
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true,
     },
     () => console.log('connect to database'),
 );
@@ -27,8 +25,6 @@ app.use(
 );
 app.use(cookie_parsers());
 app.use(express.urlencoded({ extended: true }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 // add route
 const user = require('./routers/userRouter');
