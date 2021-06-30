@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
             message: 'confirmpassword with password not the same',
         },
     },
-    rule: {
+    role: {
         type: String,
         enum: ['user', 'admin'],
         default: 'user',

@@ -15,8 +15,8 @@ const createJWT = (res, id) => {
 
 exports.registir = async (req, res) => {
     try {
-        const { email, password, confirmPassword, name, phone } = req.body;
-        const user = await User.create({ email, name, password, confirmPassword, phone });
+        const { email, password, confirmPassword, name, phone, role } = req.body;
+        const user = await User.create({ email, name, password, confirmPassword, phone, role });
 
         const jwt = createJWT(res, user.id);
         res.status(200).json({
@@ -80,3 +80,11 @@ exports.protect = async (req, res, next) => {
     res.locals.user = user;
     next();
 };
+
+exports.cheack =
+    (...all) =>
+    (req, res, next) => {
+        if (!all.includes(req.user.role))
+            return errorHandler(res, 400, 'just admin can access this route');
+        next();
+    };

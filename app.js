@@ -27,7 +27,7 @@ app.use(cookie_parsers());
 app.use(express.urlencoded({ extended: true }));
 
 // add route
-const user = require('./routers/userRouter');
-app.use('/api/v1/users/', user);
+app.use('/api/v1/users/', require('./routers/userRouter'));
+app.use('/api/v1/goods/', require('./routers/goodsRouter'));
 
 module.exports = app;
