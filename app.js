@@ -18,6 +18,7 @@ mongoose.connect(
 );
 
 //middleware
+app.use(express.static('public'));
 app.use(
     express.json({
         limit: '10kb',
